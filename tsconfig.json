@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "es2020",
+    "target": "es2021",
     "outDir": "./dist",
     "module": "commonjs",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictNullChecks": true,
   }
 }
