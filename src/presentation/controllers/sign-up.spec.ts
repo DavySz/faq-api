@@ -1,9 +1,12 @@
+import { type AccountModel } from '../../domain/models'
+import { type AddAccountModel, type AddAccount } from '../../domain/usecases'
 import { InvalidParamError, MissingParamError, ServerError } from '../errors'
 import { type EmailValidator } from '../protocols'
 import { SignUpController } from './sign-up'
 
 interface SutModel {
   emailValidatorStub: EmailValidator
+  addAccountStub: AddAccount
   sut: SignUpController
 }
 
@@ -17,11 +20,30 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    add (account: AddAccountModel): AccountModel {
+      const fakeAccount = {
+        id: 'any-valid-id',
+        name: 'any-valid-name',
+        password: 'any-valid-password',
+        email: 'any-valid-mail@mail.com'
+      }
+
+      return fakeAccount
+    }
+  }
+
+  return new AddAccountStub()
+}
+
 const makeSut = (): SutModel => {
+  const addAccountStub = makeAddAccount()
   const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
+  const sut = new SignUpController(emailValidatorStub, addAccountStub)
   return {
     emailValidatorStub,
+    addAccountStub,
     sut
   }
 }
@@ -162,5 +184,28 @@ describe('Sign Up Controller', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  it('should call AddAccount.add with correct values', () => {
+    const { sut, addAccountStub } = makeSut()
+
+    const addSpy = jest.spyOn(addAccountStub, 'add')
+
+    const httpRequest = {
+      body: {
+        name: 'any-name',
+        email: 'any-mail@mail.com',
+        password: 'any-password',
+        passwordConfirmation: 'any-password'
+      }
+    }
+
+    sut.handle(httpRequest)
+
+    expect(addSpy).toHaveBeenCalledWith({
+      email: 'any-mail@mail.com',
+      password: 'any-password',
+      name: 'any-name'
+    })
   })
 })
