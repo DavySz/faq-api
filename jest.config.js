@@ -8,8 +8,8 @@ module.exports = {
     '<rootDir>/src/**/*.ts',
     '!**/protocols/**',
     '!<rootDir>/src/domain/**/*.ts',
-    '!<rootDir>/src/**/*-protocols.ts'
-
+    '!<rootDir>/src/**/*-protocols.ts',
+    '!<rootDir>/src/main/**'
   ],
   transform: {
     '.+\\.ts$': 'ts-jest'
