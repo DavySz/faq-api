@@ -1,8 +1,7 @@
-import { InvalidParamError, MissingParamError } from '../../errors'
-import type { HttpRequest, EmailValidator } from '../sign-up/sign-up-protocols'
-import { badRequest, serverError, unauthorized } from '../../helpers'
 import { LoginController } from './login'
-import { type Authentication } from '../../../domain/usecases/authentication'
+import { InvalidParamError, MissingParamError } from '../../errors'
+import { badRequest, serverError, unauthorized } from '../../helpers'
+import type { Authentication, EmailValidator, HttpRequest } from './login-protocols'
 
 interface MakeSutModel {
   emailValidatorStub: EmailValidator
