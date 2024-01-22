@@ -38,8 +38,8 @@ export class SignUpController implements Controller {
       const account = await this.addAccount.add(accountModel)
 
       return ok(account)
-    } catch {
-      return serverError()
+    } catch (error: unknown) {
+      return serverError(error as Error)
     }
   }
 }
