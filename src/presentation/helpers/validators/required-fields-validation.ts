@@ -2,7 +2,7 @@ import type { Nullable } from '../../common/types'
 import { MissingParamError } from '../../errors'
 import type { Validation } from './validation'
 
-export class RequiredFieldsValidationValidation implements Validation {
+export class RequiredFieldsValidation implements Validation {
   constructor (private readonly fieldName: string) {}
 
   validate (input: any): Nullable<Error> {

@@ -1,4 +1,4 @@
-import { RequiredFieldsValidationValidation } from '../../presentation/helpers/validators/required-fields-validation'
+import { RequiredFieldsValidation } from '../../presentation/helpers/validators/required-fields-validation'
 import { type Validation } from '../../presentation/helpers/validators/validation'
 import { ValidationComposite } from '../../presentation/helpers/validators/validation-composite'
 import { makeSignUpValidation } from './sign-up-validation'
@@ -12,7 +12,7 @@ describe('SignUpValidation Factory', () => {
     const validations: Validation[] = []
 
     for (const field of ['name', 'email', 'password', 'passwordConfirmation']) {
-      validations.push(new RequiredFieldsValidationValidation(field))
+      validations.push(new RequiredFieldsValidation(field))
     }
 
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
