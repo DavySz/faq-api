@@ -1,4 +1,5 @@
 import { type AuthenticationModel } from '../../../domain/usecases/authentication'
+import { type HashCompare } from '../../protocols/criptography/hash-compare'
 import type { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import type { AccountModel } from '../add-account/db-add-account-protocols'
 import { DbAuthenticationRepository } from './db-authentication'
@@ -6,12 +7,13 @@ import { DbAuthenticationRepository } from './db-authentication'
 interface SutModel {
   loadAccountByEmailStub: LoadAccountByEmailRepository
   sut: DbAuthenticationRepository
+  hashCompareStub: HashCompare
 }
 
 const makeAccount = (): AccountModel => ({
   id: 'any-id',
   name: 'any-name',
-  password: 'any-password',
+  password: 'hashed-password',
   email: 'any-email@mail.com'
 })
 
@@ -30,12 +32,24 @@ const makeLoadAccountByEmail = (): LoadAccountByEmailRepository => {
   return new DbLoadAccountByEmailStub()
 }
 
+const makeHashCompare = (): HashCompare => {
+  class HashCompareStub implements HashCompare {
+    async compare (value: string, hash: string): Promise<boolean> {
+      return await Promise.resolve(true)
+    }
+  }
+
+  return new HashCompareStub()
+}
+
 const makeSut = (): SutModel => {
+  const hashCompareStub = makeHashCompare()
   const loadAccountByEmailStub = makeLoadAccountByEmail()
-  const sut = new DbAuthenticationRepository(loadAccountByEmailStub)
+  const sut = new DbAuthenticationRepository(loadAccountByEmailStub, hashCompareStub)
 
   return {
     loadAccountByEmailStub,
+    hashCompareStub,
     sut
   }
 }
@@ -70,5 +84,14 @@ describe('BbAuthentication UseCase', () => {
     const accessToken = await sut.auth(makeFakeAuthentication())
 
     expect(accessToken).toBeNull()
+  })
+
+  it('should call HashCompare with correct values', async () => {
+    const { hashCompareStub, sut } = makeSut()
+
+    const compareSpy = jest.spyOn(hashCompareStub, 'compare')
+    await sut.auth(makeFakeAuthentication())
+
+    expect(compareSpy).toHaveBeenCalledWith('any-password', 'hashed-password')
   })
 })
