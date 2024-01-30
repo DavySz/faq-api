@@ -60,4 +60,15 @@ describe('BbAuthentication UseCase', () => {
 
     await expect(error).rejects.toThrow(new Error())
   })
+
+  it('should return null if LoadAccountByEmailRepository returns null', async () => {
+    const { loadAccountByEmailStub, sut } = makeSut()
+
+    jest.spyOn(loadAccountByEmailStub, 'load')
+      .mockReturnValueOnce(Promise.resolve(null))
+
+    const accessToken = await sut.auth(makeFakeAuthentication())
+
+    expect(accessToken).toBeNull()
+  })
 })
