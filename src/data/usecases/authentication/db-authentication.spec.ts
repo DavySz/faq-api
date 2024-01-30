@@ -154,4 +154,10 @@ describe('BbAuthentication UseCase', () => {
 
     await expect(error).rejects.toThrow(new Error())
   })
+
+  it('should return accessToken on success', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.auth(makeFakeAuthentication())
+    expect(accessToken).toBe('any-token')
+  })
 })
