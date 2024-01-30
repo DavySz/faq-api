@@ -1,5 +1,5 @@
 import type { AuthenticationModel, Authentication } from '../../../domain/usecases/authentication'
-import { type LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository'
+import { type LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 
 export class DbAuthenticationRepository implements Authentication {
   constructor (
