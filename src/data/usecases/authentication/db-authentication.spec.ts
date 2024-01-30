@@ -185,4 +185,15 @@ describe('BbAuthentication UseCase', () => {
 
     expect(updateSpy).toHaveBeenCalledWith('any-id', 'any-token')
   })
+
+  it('should throw UpdateAccessTokenRepository throws', async () => {
+    const { updateAccessTokenRepositoryStub, sut } = makeSut()
+
+    jest.spyOn(updateAccessTokenRepositoryStub, 'update')
+      .mockReturnValueOnce(Promise.reject(new Error()))
+
+    const error = sut.auth(makeFakeAuthentication())
+
+    await expect(error).rejects.toThrow(new Error())
+  })
 })
