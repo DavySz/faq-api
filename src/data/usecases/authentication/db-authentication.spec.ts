@@ -1,6 +1,6 @@
-import { type AuthenticationModel } from '../../../domain/usecases/authentication'
-import { type HashCompare } from '../../protocols/criptography/hash-compare'
-import { type TokenGenerator } from '../../protocols/criptography/token-generator'
+import type { AuthenticationModel } from '../../../domain/usecases/authentication'
+import type { HashCompare } from '../../protocols/criptography/hash-compare'
+import type { TokenGenerator } from '../../protocols/criptography/token-generator'
 import type { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
 import type { AccountModel } from '../add-account/db-add-account-protocols'
 import { DbAuthenticationRepository } from './db-authentication'
@@ -142,5 +142,16 @@ describe('BbAuthentication UseCase', () => {
     await sut.auth(makeFakeAuthentication())
 
     expect(generateSpy).toHaveBeenCalledWith('any-id')
+  })
+
+  it('should throw TokenGenerator throws', async () => {
+    const { tokenGeneratorStub, sut } = makeSut()
+
+    jest.spyOn(tokenGeneratorStub, 'generate')
+      .mockReturnValueOnce(Promise.reject(new Error()))
+
+    const error = sut.auth(makeFakeAuthentication())
+
+    await expect(error).rejects.toThrow(new Error())
   })
 })
