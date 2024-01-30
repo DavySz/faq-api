@@ -1,6 +1,6 @@
 import type { AddAccountModel, AddAccount, EmailValidator, AccountModel, HttpRequest, Validation } from './sign-up-protocols'
 import { MissingParamError, ServerError } from '../../errors'
-import { badRequest, ok, serverError } from '../../helpers'
+import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
 import type { Nullable } from '../../common/types'
 import { SignUpController } from './sign-up'
 

@@ -1,5 +1,5 @@
-import { ServerError, UnauthorizedError } from '../errors'
-import type { HttpResponse } from '../protocols'
+import { ServerError, UnauthorizedError } from '../../errors'
+import type { HttpResponse } from '../../protocols'
 
 export const unauthorized = (): HttpResponse => ({
   statusCode: 401,
