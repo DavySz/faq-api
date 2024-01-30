@@ -17,7 +17,11 @@ export class DbAuthenticationRepository implements Authentication {
       return null
     }
 
-    await this.hashCompare.compare(authentication.password, account.password)
+    const isEqual = await this.hashCompare.compare(authentication.password, account.password)
+
+    if (!isEqual) {
+      return null
+    }
 
     return await Promise.resolve('any-string')
   };
