@@ -105,4 +105,15 @@ describe('BbAuthentication UseCase', () => {
 
     await expect(error).rejects.toThrow(new Error())
   })
+
+  it('should return null if HashCompare returns false', async () => {
+    const { hashCompareStub, sut } = makeSut()
+
+    jest.spyOn(hashCompareStub, 'compare')
+      .mockReturnValueOnce(Promise.resolve(false))
+
+    const accessToken = await sut.auth(makeFakeAuthentication())
+
+    expect(accessToken).toBeNull()
+  })
 })
