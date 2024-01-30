@@ -1,6 +1,6 @@
 import { type Nullable } from '../../common/types'
 import { MissingParamError } from '../../errors'
-import { type Validation } from './validation'
+import { type Validation } from '../../protocols/validation'
 import { ValidationComposite } from './validation-composite'
 
 interface SutModel {

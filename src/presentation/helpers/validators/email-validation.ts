@@ -1,7 +1,7 @@
 import type { EmailValidator } from '../../protocols/email-validator'
 import type { Nullable } from '../../common/types'
 import { InvalidParamError } from '../../errors'
-import type { Validation } from './validation'
+import type { Validation } from '../../protocols/validation'
 
 export class EmailValidation implements Validation {
   constructor (

@@ -1,5 +1,5 @@
 import type { Nullable } from '../../common/types'
-import type { Validation } from './validation'
+import type { Validation } from '../../protocols/validation'
 
 export class ValidationComposite implements Validation {
   constructor (private readonly validations: Validation[]) {}
